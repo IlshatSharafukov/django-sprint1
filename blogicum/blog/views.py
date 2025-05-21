@@ -58,7 +58,7 @@ def post_detail(request, post_id):
     except (IndexError, ValueError):
         return HttpResponseNotFound('<h1>404 Page not found</h1>')
 
-    context = {"post": posts[post_id]}
+    context = {"post": post}
     template = "blog/detail.html"
     return render(request, template, context)
 
