@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponseNotFound
 
 posts = [
     {
@@ -45,13 +46,19 @@ posts = [
 
 
 def index(request):
-    context = {"posts": reversed(posts)}
+    sorted_list_of_posts = sorted(posts, key=lambda d: -d['id'])
+    context = {"posts": sorted_list_of_posts}
     template = "blog/index.html"
     return render(request, template, context)
 
 
-def post_detail(request, pk):
-    context = {"post": posts[pk]}
+def post_detail(request, post_id):
+    try:
+        post = posts[int(post_id)]
+    except (IndexError, ValueError):
+        return HttpResponseNotFound('<h1>404 Page not found</h1>')
+
+    context = {"post": posts[post_id]}
     template = "blog/detail.html"
     return render(request, template, context)
 
